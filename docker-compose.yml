@@ -1,0 +1,7 @@
+app:
+  build: .
+  ports:
+    - "8000:8000"
+  volumes:
+    - ".:/go/src/app"
+  command: "make install server"

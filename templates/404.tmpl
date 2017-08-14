@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
+<link rel="stylesheet" href="/static/main.css">
+<title>Error</title>
+
+<div>
+<h1>VOYAtter</h1>
+<h2>404 Not Found</h2>
+
+<p>お探しのページは見つかりませんでした。 URL をお確かめのうえ、もう一度アクセスしてください。</p>
+{{ if .ReturnPage }}
+<p><a href="{{.ReturnPage}}">前のページに戻る</a></p>
+{{ end }}
+
+</div>

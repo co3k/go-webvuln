@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
+<link rel="stylesheet" href="/static/main.css">
+<title>Login</title>
+
+<div class="login container">
+<h1>VOYAtter</h1>
+<h2>ボヤキをソウゾウせよ</h2>
+
+<div class="pure-u-1-1">
+<form action="/login" method="post" class="pure-form pure-form-aligned">
+{{ if .IsError }}
+<p>※ユーザー名もしくはパスワードが間違っています。</p>
+{{ end }}
+<fieldset>
+<div class="pure-control-group">
+<label for="username">ユーザ名 (ゲストの場合は "guest")</label>
+<input id="username" type="text" name="username" value={{.Username}}>
+</div>
+
+<div class="pure-control-group">
+<label for="password">パスワード (ゲストの場合は "password")</label>
+<input id="password" type="password" name="password">
+</div>
+
+<button class="pure-button" type="submit">ログイン</button>
+
+</fieldset>
+</div>
