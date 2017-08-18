@@ -1,9 +1,9 @@
 package view
 
 import (
+	"html/template"
 	"log"
 	"net/http"
-	"text/template"
 )
 
 func RenderHtml(w http.ResponseWriter, path string, params interface{}) {

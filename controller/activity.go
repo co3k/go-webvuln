@@ -8,7 +8,6 @@ import (
 	"github.com/co3k/go-webvuln/view"
 	"net/http"
 	"strconv"
-	"text/template"
 )
 
 type Activity struct {
@@ -60,8 +59,8 @@ func (a *Activity) Home(w http.ResponseWriter, r *http.Request, u model.User) {
 		Sizes      []string
 	}{
 		u,
-		template.HTMLEscapeString(size),
-		template.HTMLEscapeString(page),
+		size,
+		page,
 		strconv.Itoa(totalNum),
 		string(json_activities),
 		[]string{"5", "10", "20", "30", "40", "50"},

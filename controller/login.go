@@ -7,7 +7,6 @@ import (
 	"github.com/co3k/go-webvuln/view"
 	"net/http"
 	"net/url"
-	"text/template"
 )
 
 type Login struct {
@@ -20,7 +19,7 @@ func (l *Login) LoginForm(w http.ResponseWriter, r *http.Request) {
 		Username string
 		IsError  bool
 	}{
-		template.HTMLEscapeString(q.Get("username")),
+		q.Get("username"),
 		len(q.Get("username")) > 0,
 	})
 }
