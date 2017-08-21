@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/co3k/go-webvuln/model"
 	"github.com/co3k/go-webvuln/view"
+	"html/template"
 	"net/http"
 	"strconv"
 )
@@ -55,14 +56,14 @@ func (a *Activity) Home(w http.ResponseWriter, r *http.Request, u model.User) {
 		Size       string
 		Page       string
 		TotalNum   string
-		Activities string
+		Activities template.JS
 		Sizes      []string
 	}{
 		u,
 		size,
 		page,
 		strconv.Itoa(totalNum),
-		string(json_activities),
+		template.JS(string(json_activities)),
 		[]string{"5", "10", "20", "30", "40", "50"},
 	})
 }
