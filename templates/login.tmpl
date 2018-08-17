@@ -10,13 +10,13 @@
 
 <div class="pure-u-1-1">
 <form action="/login" method="post" class="pure-form pure-form-aligned">
-{{ if .IsError }}
+[[ if .IsError ]]
 <p>※ユーザー名もしくはパスワードが間違っています。</p>
-{{ end }}
+[[ end ]]
 <fieldset>
 <div class="pure-control-group">
 <label for="username">ユーザ名 (ゲストの場合は "guest")</label>
-<input id="username" type="text" name="username" value={{.Username}}>
+<input id="username" type="text" name="username" value=[[.Username]]>
 </div>
 
 <div class="pure-control-group">

@@ -5,7 +5,7 @@
 <title>Home</title>
 
 <div class="pure-menu pure-menu-fixed">
-<h1>VOYAtter <span class="note">{{.User.Username}} さんとしてログインしています　<a href="/logout" onclick="var r = new XMLHttpRequest(); r.open('POST', '/logout'); r.send(); location.href='/login'; return false;">[logout]</a></span></h1>
+<h1>VOYAtter <span class="note">[[.User.Username]] さんとしてログインしています　<a href="/logout" onclick="var r = new XMLHttpRequest(); r.open('POST', '/logout'); r.send(); location.href='/login'; return false;">[logout]</a></span></h1>
 </div>
 
 <div id="activities">
@@ -24,9 +24,9 @@
 
 <p>size:
 <select onchange="location.href='/?size='+this.value">
-{{range .Sizes}}
-  <option value="{{.}}" {{if eq $.Size .}}selected="selected"{{end}}>{{.}}</option>
-{{end}}
+[[range .Sizes]]
+  <option value="[[.]]" [[if eq $.Size .]]selected="selected"[[end]]>[[.]]</option>
+[[end]]
 </select>
 </p>
 
@@ -48,8 +48,8 @@
 <script>
 'use strict';
 
-const totalPages = parseInt(parseInt('{{.TotalNum}}', 10) / parseInt('{{.Size}}', 10), 10) + 1;
-const data = { page: "{{.Page}}", size: "{{.Size}}", totalPages: totalPages, pager_display: `{{.Page}} / ${totalPages}`, activities: {{.Activities}}, };
+const totalPages = parseInt(parseInt('[[.TotalNum]]', 10) / parseInt('[[.Size]]', 10), 10) + 1;
+const data = { page: "[[.Page]]", size: "[[.Size]]", totalPages: totalPages, pager_display: `[[.Page]] / ${totalPages}`, activities: [[.Activities]], };
 
 function renderActivities(pageData) {
   const activityList = document.querySelector("#activities ul.activity");

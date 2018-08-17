@@ -4,10 +4,12 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"path/filepath"
 )
 
 func RenderHtml(w http.ResponseWriter, path string, params interface{}) {
-	tmpl, err := template.ParseFiles(path)
+	fname := filepath.Base(path)
+	tmpl, err := template.New(fname).Delims("[[", "]]").ParseFiles(path)
 	if err != nil {
 		log.Fatal(err)
 		return

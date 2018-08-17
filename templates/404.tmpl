@@ -9,8 +9,8 @@
 <h2>404 Not Found</h2>
 
 <p>お探しのページは見つかりませんでした。 URL をお確かめのうえ、もう一度アクセスしてください。</p>
-{{ if .ReturnPage }}
-<p><a href="{{.ReturnPage}}">前のページに戻る</a></p>
-{{ end }}
+[[ if .ReturnPage ]]
+<p><a href="[[.ReturnPage]]">前のページに戻る</a></p>
+[[ end ]]
 
 </div>
