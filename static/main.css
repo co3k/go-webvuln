@@ -159,3 +159,7 @@ body {
 #footer .pager a:hover {
     color: white;
 }
+
+#prevPage, #nextPage {
+    cursor: pointer;
+}

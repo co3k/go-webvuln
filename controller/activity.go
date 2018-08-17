@@ -58,6 +58,7 @@ func (a *Activity) Home(w http.ResponseWriter, r *http.Request, u model.User) {
 		TotalNum   string
 		Activities template.JS
 		Sizes      []string
+		Msg        string
 	}{
 		u,
 		size,
@@ -65,6 +66,7 @@ func (a *Activity) Home(w http.ResponseWriter, r *http.Request, u model.User) {
 		strconv.Itoa(totalNum),
 		template.JS(string(json_activities)),
 		[]string{"5", "10", "20", "30", "40", "50"},
+		q.Get("msg"),
 	})
 }
 

@@ -14,14 +14,13 @@
 <div class="compose">
 
 <form id="activity-form" action="/activity" method="post">
-  <textarea name="body" placeholder="例) 今何してますか？　忙しいですか？"></textarea>
+  <textarea name="body" placeholder="例) 今何してますか？　忙しいですか？">[[.Msg]]</textarea>
   <p><input type="submit" value="ぼやく" /></p>
 </form>
 </div>
 </div>
 
 <div class="list">
-
 <p>size:
 <select onchange="location.href='/?size='+this.value">
 [[range .Sizes]]
@@ -31,13 +30,21 @@
 </p>
 
 <ul class="activity">
+  <li v-if="activities.length <= 0">まだ投稿がありません。キミだけのオリジナルぼやきを投稿してみよう！</li>
+  <li v-else v-for="activity in activities">
+    <ul>
+      <li class="image"><img v-bind:src="'/static/' + activity.Username + '.jpg'" width="64" height="64"></li>
+      <li class="username">{{ activity.Username }}</li>
+      <li class="body">{{ activity.Body }}</li>
+    </ul>
+  </li>
 </ul>
 
 <div id="footer">
 <ul class="pager pure-paginator">
-<li><a id="prevPage" href="#">&#171;</a></li>
-<li id="currentPage"></li>
-<li><a id="nextPage" href="#">&#187;</a></li>
+<li><a id="prevPage" v-if="parseInt(page, 10) > 1" v-on:click.prevent.cancel="load(parseInt(page, 10) - 1, size)">&#171;</a></li>
+<li id="currentPage">{{page}} / {{totalPages}}</li>
+<li><a id="nextPage" v-if="parseInt(page, 10) < totalPages" v-on:click.prevent.cancel="load(parseInt(page, 10) + 1, size)">&#187;</a></li>
 </ul>
 </div>
 
@@ -45,69 +52,20 @@
 
 </div>
 
+<script src="/static/vue.js"></script>
 <script>
 'use strict';
 
 const totalPages = parseInt(parseInt('[[.TotalNum]]', 10) / parseInt('[[.Size]]', 10), 10) + 1;
-const data = { page: "[[.Page]]", size: "[[.Size]]", totalPages: totalPages, pager_display: `[[.Page]] / ${totalPages}`, activities: [[.Activities]], };
+const data = { page: "[[.Page]]", size: "[[.Size]]", totalPages: totalPages, activities: [[.Activities]], };
 
-function renderActivities(pageData) {
-  const activityList = document.querySelector("#activities ul.activity");
-  while (activityList.firstChild) {
-    activityList.removeChild(activityList.firstChild);
+const app = new Vue({
+  el: '#activities',
+  data: data,
+  methods: {
+    load: function(page, size) {
+      location.href = '/?page=' + page + '&size=' + size;
+    },
   }
-
-  if (!pageData.activities) {
-    const noActivities = document.createElement('li');
-    noActivities.textContent = "まだ投稿がありません。キミだけのオリジナルぼやきを投稿してみよう！";
-    activityList.appendChild(noActivities);
-    return;
-  }
-
-  pageData.activities.forEach(function (activity) {
-    const imageElement = document.createElement('img');
-    imageElement.setAttribute('src', `/static/${activity.Username}.jpg`);
-    imageElement.setAttribute('width', '64');
-    imageElement.setAttribute('height', '64');
-
-    const activityImageElement = document.createElement('li');
-    activityImageElement.classList.add('image');
-    activityImageElement.appendChild(imageElement);
-
-    const activityUsernameElement = document.createElement('li');
-    activityUsernameElement.classList.add('username');
-    activityUsernameElement.textContent = activity.Username;
-
-    const activityBodyElement = document.createElement('li');
-    activityBodyElement.classList.add('body');
-    activityBodyElement.textContent = activity.Body;
-
-    const activityElement = document.createElement('ul');
-    activityElement.appendChild(activityImageElement);
-    activityElement.appendChild(activityUsernameElement);
-    activityElement.appendChild(activityBodyElement);
-
-    const activityWrapperElement = document.createElement('li');
-    activityWrapperElement.appendChild(activityElement);
-
-    activityList.appendChild(activityWrapperElement);
-  });
-}
-
-function renderPager(pageData) {
-  document.getElementById('currentPage').textContent = pageData.pager_display;
-
-  const size = parseInt(pageData.size, 10);
-
-  let prevPage = parseInt(pageData.page) - 1;
-  const prevLink = prevPage > 0 ? `/?page=${prevPage}&size=${size}` : '#';
-  document.getElementById('prevPage').setAttribute('href', prevLink);
-
-  let nextPage = parseInt(pageData.page) + 1;
-  const nextLink = nextPage <= totalPages ? `/?page=${nextPage}&size=${size}` : '#';
-  document.getElementById('nextPage').setAttribute('href', nextLink);
-}
-
-renderActivities(data);
-renderPager(data);
+})
 </script>

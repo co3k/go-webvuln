@@ -7,3 +7,6 @@ db/webvuln.db:
 
 server: db/webvuln.db
 	go run webvuln.go
+
+static/vue.js:
+	curl https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js > static/vue.js
