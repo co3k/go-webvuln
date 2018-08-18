@@ -1,2 +1,3 @@
 db/webvuln.db
 vendor
+node_modules

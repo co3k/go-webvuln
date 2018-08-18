@@ -149,8 +149,11 @@ body {
     display: inline;
 }
 
-#footer .pager li a[href="#"] {
-    display: none;
+#footer .pager li a#prevPage[href]:before {
+  content: "<<";
+}
+#footer .pager li a#nextPage[href]:before {
+  content: ">>";
 }
 
 #footer .pager a:visited,

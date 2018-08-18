@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/co3k/go-webvuln/model"
 	"github.com/co3k/go-webvuln/view"
+	"github.com/derekstavis/go-qs"
 	"html/template"
 	"net/http"
 	"strconv"
@@ -16,22 +17,26 @@ type Activity struct {
 }
 
 func (a *Activity) Home(w http.ResponseWriter, r *http.Request, u model.User) {
-	q := r.URL.Query()
+	var params map[string]interface{}
 
-	size := q.Get("size")
-	if size == "" {
-		size = "10"
+	params, err := qs.Unmarshal(r.URL.RawQuery)
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
-	sizeInt, err := strconv.Atoi(size)
+
+	if params["size"] == nil {
+		params["size"] = "10"
+	}
+	sizeInt, err := strconv.Atoi(fmt.Sprintf("%v", params["size"]))
 	if err != nil {
 		sizeInt = 10
 	}
 
-	page := q.Get("page")
-	if page == "" {
-		page = "1"
+	if params["page"] == nil {
+		params["page"] = "1"
 	}
-	pageInt, err := strconv.Atoi(page)
+	pageInt, err := strconv.Atoi(fmt.Sprintf("%v", params["page"]))
 	if err != nil {
 		pageInt = 1
 	}
@@ -41,30 +46,40 @@ func (a *Activity) Home(w http.ResponseWriter, r *http.Request, u model.User) {
 		fmt.Println(err)
 		return
 	}
-	json_activities, err := json.Marshal(activities)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	params["activities"] = activities
+
 	totalNum, err := model.CountActivities(a.DB)
 	if err != nil {
 		totalNum = 0
 	}
+	params["total_num"] = totalNum
+
+	totalPage := int(totalNum/sizeInt) + 1
+	params["total_page"] = totalPage
+	params["sizes"] = []string{"5", "10", "20", "30", "40", "50"}
+	params["user"] = u
+
+	if pageInt > 1 {
+		params["prev_pager"] = map[string]string{
+			"href": fmt.Sprintf("/?page=%d&size=%d", (pageInt - 1), sizeInt),
+		}
+	}
+	if pageInt < totalPage {
+		params["next_pager"] = map[string]string{
+			"href": fmt.Sprintf("/?page=%d&size=%d", (pageInt + 1), sizeInt),
+		}
+	}
+
+	j, err := json.Marshal(params)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
 	view.RenderHtml(w, "templates/home.tmpl", struct {
-		User       model.User
-		Size       string
-		Page       string
-		TotalNum   string
-		Activities template.JS
-		Sizes      []string
+		Params template.JS
 	}{
-		u,
-		size,
-		page,
-		strconv.Itoa(totalNum),
-		template.JS(string(json_activities)),
-		[]string{"5", "10", "20", "30", "40", "50"},
+		template.JS(string(j)),
 	})
 }
 
