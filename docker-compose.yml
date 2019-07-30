@@ -3,5 +3,5 @@ app:
   ports:
     - "8000:8000"
   volumes:
-    - ".:/go/src/app"
-  command: "make -C /go/src/app install server"
+    - ".:/go/src/github.com/co3k/go-webvuln"
+  command: "make -C /go/src/github.com/co3k/go-webvuln install server"
