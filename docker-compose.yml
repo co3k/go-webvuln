@@ -4,4 +4,4 @@ app:
     - "8000:8000"
   volumes:
     - ".:/go/src/app"
-  command: "make install server"
+  command: "make -C /go/src/app install server"
